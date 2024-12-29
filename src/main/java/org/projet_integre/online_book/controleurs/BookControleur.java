@@ -1,23 +1,18 @@
 package org.projet_integre.online_book.controleurs;
 
-
 import org.projet_integre.online_book.models.Book;
 import org.projet_integre.online_book.services.BookService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import lombok.Data;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/books")
-@Data
+@CrossOrigin(origins = "http://localhost:4200")
 public class BookControleur {
 
     private final BookService bookService;
 
-    @Autowired
     public BookControleur(BookService bookService) {
         this.bookService = bookService;
     }
@@ -35,21 +30,21 @@ public class BookControleur {
     }
 
     // READ ONE
-    @GetMapping("/{id}")
-    public Book getBookById(@PathVariable Long id) {
-        return bookService.getBookById(id).orElseThrow(() -> new RuntimeException("Livre non trouvé"));
+    @GetMapping("/{title}")
+    public List<Book> getBooksById(@PathVariable String title) {
+        return bookService.getBooksByTitle(title);
     }
 
     // UPDATE
-    @PutMapping("/{id}")
-    public Book updateBook(@PathVariable Long id, @RequestBody Book book) {
-        return bookService.updateBook(id, book);
+    @PutMapping("/{isbn}")
+    public Book updateBook(@PathVariable String isbn, @RequestBody Book book) {
+        return bookService.updateBook(isbn, book);
     }
 
     // DELETE
-    @DeleteMapping("/{id}")
-    public void deleteBook(@PathVariable Long id) {
-        bookService.deleteBook(id);
+    @DeleteMapping("/{isbn}")
+    public void deleteBook(@PathVariable String isbn) {
+        bookService.deleteBook(isbn);
     }
 }
 

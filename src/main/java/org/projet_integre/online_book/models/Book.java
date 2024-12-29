@@ -1,9 +1,17 @@
 package org.projet_integre.online_book.models;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import jakarta.annotation.Nonnull;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -11,30 +19,60 @@ import jakarta.persistence.Table;
 public class Book {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String isbn;
+    @Column(unique = true)
     private String title;
+    private int nbrExemplaireAvai;
+    @Nonnull
     private String author;
-    private double price;
+    private String cover_image;
 
-    public Book() {}
+    @ManyToOne
+    @JoinColumn(name = "categorie", nullable = false)
+    private Categorie categorie;
 
-    public Book(String title, String author, double price) {
+    @OneToMany(mappedBy = "livre", fetch = FetchType.EAGER)
+    private List<Emprunter> prets = new ArrayList<>();
+
+    public Book(String isbn, String title, String author, String cover_image, Categorie categorie) {
+        this.isbn = isbn;
         this.title = title;
         this.author = author;
-        this.price = price;
+        this.cover_image = cover_image;
+        this.categorie = categorie;
     }
 
-    public Long getId() {
-        return id;
+    public Book(){}
+ 
+
+    public List<Emprunter> getPrets() {
+        return this.prets;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setPrets(List<Emprunter> prets) {
+        this.prets = prets;
     }
+
+
+    public int getNbrExemplaireAvai() {
+        return this.nbrExemplaireAvai;
+    }
+
+    public void setNbrExemplaireAvai(int nbrExemplaireAvai) {
+        this.nbrExemplaireAvai = nbrExemplaireAvai;
+    }
+
 
     public String getTitle() {
-        return title;
+        return this.title;
+    }
+
+    public Categorie getCategorie() {
+        return this.categorie;
+    }
+
+    public void setCategorie(Categorie categorie) {
+        this.categorie = categorie;
     }
 
     public void setTitle(String title) {
@@ -42,18 +80,27 @@ public class Book {
     }
 
     public String getAuthor() {
-        return author;
+        return this.author;
     }
 
     public void setAuthor(String author) {
         this.author = author;
     }
 
-    public double getPrice() {
-        return price;
+    public String getIsbn() {
+        return this.isbn;
     }
 
-    public void setPrice(double price) {
-        this.price = price;
+    public void setIsbn(String isbn) {
+        this.isbn = isbn;
     }
+
+    public String getCover_image() {
+        return this.cover_image;
+    }
+
+    public void setCover_image(String cover_image) {
+        this.cover_image = cover_image;
+    }
+
 }
