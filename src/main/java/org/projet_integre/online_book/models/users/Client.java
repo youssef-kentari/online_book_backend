@@ -5,10 +5,9 @@ import java.util.List;
 
 import org.projet_integre.online_book.models.Emprunter;
 import org.projet_integre.online_book.models.User;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-import jakarta.persistence.CascadeType;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -20,6 +19,7 @@ public class Client extends User{
     @Column(unique = true)
     private Long matricule;
 
+    @JsonBackReference
     @OneToMany(mappedBy = "client", fetch = FetchType.EAGER)
     private List<Emprunter> prets = new ArrayList<>();
 

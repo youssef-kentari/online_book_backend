@@ -2,43 +2,66 @@ package org.projet_integre.online_book.models;
 
 import java.time.LocalDate;
 import org.projet_integre.online_book.models.users.Client;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.MapsId;
 
 @Entity
 public class Emprunter {
 
-    @EmbeddedId
-    private ClientBookPK id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    private LocalDate dateEmprunt; // Utilisation de LocalDate pour éviter les problèmes de fuseaux horaires
+    @Column(nullable = false)
+    private LocalDate dateEmprunt;
+    @Column(nullable = false)  
     private LocalDate dateRetour;
 
     @ManyToOne
-    @MapsId("client_id")
     @JoinColumn(name = "client_id", nullable = false)
+    @JsonManagedReference
     private Client client;
 
     @ManyToOne
-    @MapsId("livre_id")
     @JoinColumn(name = "livre_id", nullable = false)
+    @JsonManagedReference
     private Book livre;
 
-    public Emprunter(Client client, Book livre, LocalDate dateEmprunt, LocalDate dateRetour) {
-        this.id = new ClientBookPK(client.getId(), livre.getIsbn());
+    @Enumerated(EnumType.STRING)
+    private Etat etat;
+
+    public Emprunter() {}
+
+
+    public Emprunter(Long id, LocalDate dateEmprunt, LocalDate dateRetour, Client client, Book livre) {
+        this.id = id;
         this.dateEmprunt = dateEmprunt;
         this.dateRetour = dateRetour;
         this.client = client;
         this.livre = livre;
     }
 
-    public Emprunter() {}
+    public Long getId() {
+        return this.id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public LocalDate getDateEmprunt() {
-        return dateEmprunt;
+        return this.dateEmprunt;
     }
 
     public void setDateEmprunt(LocalDate dateEmprunt) {
@@ -46,7 +69,7 @@ public class Emprunter {
     }
 
     public LocalDate getDateRetour() {
-        return dateRetour;
+        return this.dateRetour;
     }
 
     public void setDateRetour(LocalDate dateRetour) {
@@ -54,7 +77,7 @@ public class Emprunter {
     }
 
     public Client getClient() {
-        return client;
+        return this.client;
     }
 
     public void setClient(Client client) {
@@ -62,18 +85,19 @@ public class Emprunter {
     }
 
     public Book getLivre() {
-        return livre;
+        return this.livre;
     }
 
     public void setLivre(Book livre) {
         this.livre = livre;
     }
 
-    public ClientBookPK getId() {
-        return id;
+    public Etat getEtat() {
+        return this.etat;
     }
 
-    public void setId(ClientBookPK id) {
-        this.id = id;
+    public void setEtat(Etat etat) {
+        this.etat = etat;
     }
+
 }

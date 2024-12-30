@@ -3,6 +3,9 @@ package org.projet_integre.online_book.models;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -29,8 +32,10 @@ public class Book {
 
     @ManyToOne
     @JoinColumn(name = "categorie", nullable = false)
+    @JsonManagedReference
     private Categorie categorie;
 
+    @JsonBackReference
     @OneToMany(mappedBy = "livre", fetch = FetchType.EAGER)
     private List<Emprunter> prets = new ArrayList<>();
 
@@ -61,7 +66,6 @@ public class Book {
     public void setNbrExemplaireAvai(int nbrExemplaireAvai) {
         this.nbrExemplaireAvai = nbrExemplaireAvai;
     }
-
 
     public String getTitle() {
         return this.title;

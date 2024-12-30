@@ -2,6 +2,8 @@ package org.projet_integre.online_book.models;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -22,6 +24,7 @@ public class Categorie {
     @Column(unique = true)
     private String categorie;
 
+    @JsonBackReference
     @OneToMany(mappedBy = "categorie", fetch = FetchType.EAGER)
     private List<Book> books;
 
