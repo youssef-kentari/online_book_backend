@@ -1,15 +1,12 @@
 package org.projet_integre.online_book.models;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Inheritance;
-import jakarta.persistence.InheritanceType;
+
+import jakarta.persistence.*;
 
 @Entity
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.STRING)
+@DiscriminatorValue("user")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -17,6 +14,9 @@ public class User {
 
     @Column(nullable = false)
     private String nom;
+
+    @Column(name = "username",unique = true)
+    private String username;
 
     @Column(nullable = false)
     private String prenom;
@@ -27,13 +27,20 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    public User(Long id, String nom, String prenom, String email, String password) {
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
+
+    public User(Long id, String nom, String username, String prenom, String email, String password, Role role) {
         this.id = id;
         this.nom = nom;
+        this.username = username;
         this.prenom = prenom;
         this.email = email;
         this.password = password;
+        this.role = role;
     }
+
 
     public User(){}
 
@@ -49,8 +56,25 @@ public class User {
         return this.nom;
     }
 
+
+    public String getUsername() {
+        return this.username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
     public void setNom(String nom) {
         this.nom = nom;
+    }
+
+    public Role getRole() {
+        return this.role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     public String getPrenom() {

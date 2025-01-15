@@ -29,6 +29,11 @@ public class ClientControleur {
         this.clientService = clientService;
     }
 
+    @PostMapping
+    public Client addClient(@RequestBody Client client) {
+        return clientRepository.save(client);
+    }
+
     @GetMapping
     public List<Client> getAllClients() {
         return clientRepository.findAll();

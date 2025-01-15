@@ -8,9 +8,9 @@ import org.springframework.data.jpa.repository.Query;
 
 
 public interface BookRepository extends JpaRepository<Book, String> {
-    Book findByIsbn(String isbn);
-    void deleteByIsbn(String isbn);
-
     @Query("SELECT b FROM Book b WHERE b.title LIKE %:title%")
     List<Book> getBooksByTitle(String title);
+
+    @Query("SELECT b FROM Book b WHERE b.categorie.categorie=:categorie")
+    List<Book> getBooksByCategorie(String categorie);
 }

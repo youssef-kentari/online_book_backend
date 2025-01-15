@@ -2,10 +2,7 @@ package org.projet_integre.online_book.repository;
 
 import java.util.List;
 
-import org.projet_integre.online_book.models.Book;
 import org.projet_integre.online_book.models.Emprunter;
-import org.projet_integre.online_book.models.Etat;
-import org.projet_integre.online_book.models.users.Client;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

@@ -27,6 +27,10 @@ public class BookService {
         return bookRepository.findAll();
     }
 
+    public List<Book> getBooksByCategorie(String categorie){
+        return bookRepository.getBooksByCategorie(categorie);
+    }
+
     public List<Book> getBooksByTitle(String title) {
         return bookRepository.getBooksByTitle(title);
     }
@@ -45,7 +49,7 @@ public class BookService {
                 .map(book -> {
                     book.setTitle(bookDetails.getTitle());
                     book.setAuthor(bookDetails.getAuthor());
-                    book.setIsbn(generateISBN());
+                    book.setNbrExemplaireAvai(bookDetails.getNbrExemplaireAvai());
                     book.setCover_image(bookDetails.getCover_image());
                     return bookRepository.save(book);
                 })

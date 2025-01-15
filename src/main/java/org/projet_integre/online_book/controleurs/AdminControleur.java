@@ -1,16 +1,11 @@
 package org.projet_integre.online_book.controleurs;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import org.projet_integre.online_book.models.users.Administrateur;
+import org.projet_integre.online_book.models.users.Bibliothecaire;
 import org.projet_integre.online_book.repository.AdminRepository;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 
 @RestController
 @RequestMapping("/api/admins")
@@ -24,8 +19,13 @@ public class AdminControleur {
     }
 
     @GetMapping
-    public List<Administrateur> getAllAdmins() {
+    public List<Bibliothecaire> getAllAdmins() {
         return adminRepository.findAll();
+    }
+
+    @PostMapping
+    public Bibliothecaire addAdmin(@RequestBody Bibliothecaire bibliothecaire){
+        return adminRepository.save(bibliothecaire);
     }
 
     @DeleteMapping("/{tocken}")

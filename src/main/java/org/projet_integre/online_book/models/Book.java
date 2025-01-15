@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.annotation.Nonnull;
@@ -26,21 +27,17 @@ public class Book {
     @Column(unique = true)
     private String title;
     private int nbrExemplaireAvai;
-    @Nonnull
+
     private String author;
     private String cover_image;
 
     @ManyToOne
     @JoinColumn(name = "categorie", nullable = false)
-    @JsonManagedReference
     private Categorie categorie;
 
-    @JsonBackReference
-    @OneToMany(mappedBy = "livre", fetch = FetchType.EAGER)
-    private List<Emprunter> prets = new ArrayList<>();
-
-    public Book(String isbn, String title, String author, String cover_image, Categorie categorie) {
+    public Book(String isbn, String title, String author, String cover_image, Categorie categorie,int nbrExemplaireAvai) {
         this.isbn = isbn;
+        this.nbrExemplaireAvai=nbrExemplaireAvai;
         this.title = title;
         this.author = author;
         this.cover_image = cover_image;
@@ -48,15 +45,6 @@ public class Book {
     }
 
     public Book(){}
- 
-
-    public List<Emprunter> getPrets() {
-        return this.prets;
-    }
-
-    public void setPrets(List<Emprunter> prets) {
-        this.prets = prets;
-    }
 
 
     public int getNbrExemplaireAvai() {

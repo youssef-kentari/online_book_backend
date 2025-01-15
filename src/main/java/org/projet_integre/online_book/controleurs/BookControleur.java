@@ -5,6 +5,7 @@ import org.projet_integre.online_book.services.BookService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/books")
@@ -30,9 +31,19 @@ public class BookControleur {
     }
 
     // READ ONE
-    @GetMapping("/{title}")
-    public List<Book> getBooksById(@PathVariable String title) {
+    @GetMapping("/search/{title}")
+    public List<Book> getBooksByTitle(@PathVariable String title) {
         return bookService.getBooksByTitle(title);
+    }
+
+    @GetMapping("/categorie/{categorie}")
+    public List<Book> getBooksByCategorie(@PathVariable String categorie) {
+        return bookService.getBooksByCategorie(categorie);
+    }
+
+    @GetMapping("/{isbn}")
+    public  Optional<Book> getBooksById(@PathVariable String isbn) {
+        return bookService.getBookById(isbn);
     }
 
     // UPDATE

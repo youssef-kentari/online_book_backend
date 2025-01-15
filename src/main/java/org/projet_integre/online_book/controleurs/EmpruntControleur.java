@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 import org.projet_integre.online_book.models.Emprunter;
+import org.projet_integre.online_book.models.Etat;
 import org.projet_integre.online_book.repository.ClientRepository;
 import org.projet_integre.online_book.repository.EmpruntRepository;
 import org.projet_integre.online_book.services.EmprunterService;

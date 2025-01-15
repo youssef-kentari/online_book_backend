@@ -19,7 +19,7 @@ public class CategorieController {
 
     // CREATE
     @PostMapping
-    public Categorie createBook(@RequestBody Categorie categorie) {
+    public Categorie addCategorie(@RequestBody Categorie categorie) {
         return categorieService.addCategorie(categorie);
     }
 
