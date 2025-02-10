@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.projet_integre.online_book.models.Book;
+import org.projet_integre.online_book.models.EmpruntPK;
 import org.projet_integre.online_book.models.Emprunter;
 import org.projet_integre.online_book.models.Etat;
 import org.projet_integre.online_book.repository.BookRepository;
@@ -15,12 +16,15 @@ import org.springframework.stereotype.Service;
 public class EmprunterService {
     
     private final EmpruntRepository empruntRepository;
+    private BookService bookService;
     private BookRepository bookRepository;
 
     public EmprunterService(
         EmpruntRepository empruntRepository,
+        BookService bookService,
         BookRepository bookRepository) {
 
+        this.bookService = bookService;
         this.empruntRepository = empruntRepository;
         this.bookRepository=bookRepository;
     }
@@ -43,8 +47,9 @@ public class EmprunterService {
         }
 
         // Vérifier si le client a déjà emprunté le même livre
-        List<Emprunter> empruntsByClientAndBook = empruntRepository.findEmpruntsByClientAndBook(emprunt.getClient().getId(), emprunt.getLivre().getIsbn());
-        if (!empruntsByClientAndBook.isEmpty()) {
+        List<Emprunter> empruntsByClientAndBook = empruntRepository.findEmpruntsByClientAndBook(emprunt.getId().getClient_id(),emprunt.getId().getBook_id());
+        System.out.println(empruntsByClientAndBook);
+        if (empruntsByClientAndBook.size()!=0) {
             // Log ou lever une exception personnalisée
             System.out.println("Le client a déjà emprunté ce livre.");
             return false;
@@ -58,6 +63,8 @@ public class EmprunterService {
 
                 // Enregistrer l'emprunt avec l'état "PENDING"
                 emprunt.setEtat(Etat.PENDING);
+                book.setNbrExemplaireAvai(book.getNbrExemplaireAvai()-1);
+                bookService.updateBook(emprunt.getLivre().getIsbn(), book);
                 empruntRepository.save(emprunt);
                 return true;
             } else {
@@ -72,11 +79,18 @@ public class EmprunterService {
         return false;
     }
 
+    public void confirmerEmprunt(EmpruntPK id){
+        empruntRepository.confirmerEmprunt(id);
+    }
 
-    public void annulerEmprunt(Long id){
+
+    public void annulerEmprunt(EmpruntPK id){
         Optional<Emprunter> empruntOptional = empruntRepository.findById(id);
         Emprunter emprunt = empruntOptional.get();
-        emprunt.getLivre().setNbrExemplaireAvai(emprunt.getLivre().getNbrExemplaireAvai()-1);
+        Optional<Book> bookOptional = bookRepository.findById(emprunt.getLivre().getIsbn());
+        Book book = bookOptional.get();
+        book.setNbrExemplaireAvai(book.getNbrExemplaireAvai()+1);
+        bookService.updateBook(emprunt.getLivre().getIsbn(), book);
         empruntRepository.annulerEmprunt(id);
     }
 }

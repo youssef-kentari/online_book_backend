@@ -3,17 +3,12 @@ package org.projet_integre.online_book.models;
 import java.time.LocalDate;
 
 import jakarta.persistence.*;
-import org.projet_integre.online_book.models.users.Client;
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 public class Emprunter {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @EmbeddedId
+    private EmpruntPK id;
 
     @Column(nullable = false)
     private LocalDate dateEmprunt;
@@ -21,10 +16,12 @@ public class Emprunter {
     private LocalDate dateRetour;
 
     @ManyToOne
+    @MapsId("client_id")
     @JoinColumn(name = "client_id", nullable = false)
-    private Client client;
+    private OurUsers client;
 
     @ManyToOne
+    @MapsId("book_id")
     @JoinColumn(name = "livre_id", nullable = false)
     private Book livre;
 
@@ -34,19 +31,19 @@ public class Emprunter {
     public Emprunter() {}
 
 
-    public Emprunter(Long id, LocalDate dateEmprunt, LocalDate dateRetour, Client client, Book livre) {
-        this.id = id;
+    public Emprunter(LocalDate dateEmprunt, LocalDate dateRetour, OurUsers client, Book livre) {
+        this.id = new EmpruntPK(client.getId(),livre.getIsbn());
         this.dateEmprunt = dateEmprunt;
         this.dateRetour = dateRetour;
         this.client = client;
         this.livre = livre;
     }
 
-    public Long getId() {
+    public EmpruntPK getId() {
         return this.id;
     }
 
-    public void setId(Long id) {
+    public void setId(EmpruntPK id) {
         this.id = id;
     }
 
@@ -66,11 +63,11 @@ public class Emprunter {
         this.dateRetour = dateRetour;
     }
 
-    public Client getClient() {
+    public OurUsers getClient() {
         return this.client;
     }
 
-    public void setClient(Client client) {
+    public void setClient(OurUsers client) {
         this.client = client;
     }
 
