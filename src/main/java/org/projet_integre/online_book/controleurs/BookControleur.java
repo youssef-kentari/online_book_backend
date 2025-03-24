@@ -41,7 +41,7 @@ public class BookControleur {
         return bookService.getBooksByCategorie(categorie);
     }
 
-    @GetMapping("/{isbn}")
+    @GetMapping("/hi/{isbn}")
     public  Optional<Book> getBooksById(@PathVariable String isbn) {
         return bookService.getBookById(isbn);
     }
