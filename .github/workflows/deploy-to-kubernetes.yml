@@ -1,4 +1,4 @@
-name: Deploy to Local Kubernetes via SSH
+name: Deploy to Kubernetes
 
 on:
   push:
@@ -6,36 +6,30 @@ on:
       - main
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
-
     steps:
-      # Étape 1 : Checkout du code
-      - name: Checkout code
-        uses: actions/checkout@v3
+    - name: Checkout repository
+      uses: actions/checkout@v3
 
-      # Étape 2 : Installer kubectl
-      - name: Install kubectl
-        uses: azure/setup-kubectl@v3
-        with:
-          version: 'latest'
+    - name: Log in to Docker Hub
+      run: echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
 
-      # Étape 3 : Configurer le tunnel SSH
-      - name: Set up SSH tunnel
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 --decode > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh -o StrictHostKeyChecking=no -L 6443:localhost:6443 %USERNAME%@10.72.101.50 &
+    - name: Build and push Docker image
+      run: |
+        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/springboot-app:latest .
+        docker push ${{ secrets.DOCKERHUB_USERNAME }}/springboot-app:latest
 
-      # Étape 4 : Configurer l'accès au cluster Kubernetes
-      - name: Configure Kubernetes cluster access
-        run: |
-          echo "${{ secrets.KUBE_CONFIG }}" | base64 --decode > kubeconfig.yaml
-          export KUBECONFIG=kubeconfig.yaml
+    - name: Setup kubectl
+      uses: azure/setup-kubectl@v3
+      with:
+        version: 'latest'
 
-      # Étape 5 : Déployer sur Kubernetes
-      - name: Deploy to Kubernetes
-        run: |
-          kubectl apply -f deployment.yaml
-          kubectl apply -f service.yaml
+    - name: Setup Kubeconfig
+      run: echo "${{ secrets.KUBECONFIG }}" | base64 --decode > $HOME/.kube/config
+
+    - name: Deploy to Kubernetes
+      run: |
+        kubectl apply -f k8s-mysql.yml
+        kubectl apply -f k8s-deployment.yml
+        kubectl rollout status deployment/springboot-app
