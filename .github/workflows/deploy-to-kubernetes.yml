@@ -62,12 +62,6 @@ jobs:
         kubectl apply -f k8s/deployment.yaml
         kubectl rollout restart deployment/springboot-app
         
-    - name: Get Spring Boot Pod Logs
-      run: |
-        kubectl get pods  # List pods to find the name of the Spring Boot pod
-        POD_NAME=$(kubectl get pods --selector=app=springboot-app -o jsonpath='{.items[0].metadata.name}')
-        kubectl logs $POD_NAME  # Fetch logs of the pod
-        
     - name: Check Deployment Status
       run: |
         kubectl get deployments
