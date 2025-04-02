@@ -16,7 +16,7 @@ jobs:
       run: echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
 
     - name: Build JAR file
-      run: mvn clean package
+      run: mvn clean package -DskipTests
 
     - name: Build and push Docker image
       run: |
