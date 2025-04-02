@@ -50,12 +50,30 @@ jobs:
         mkdir -p $HOME/.kube
         kind get kubeconfig --name my-cluster > $HOME/.kube/config
         export KUBECONFIG=$HOME/.kube/config
+
+    - name: Load Docker Image into Kind Cluster
+      run: |
+        kind load docker-image ${{ secrets.DOCKERHUB_USERNAME }}/springboot-app:latest --name my-cluster
+
     
     - name: Deploy to Kubernetes
       run: |
         kubectl apply -f k8s/mysql.yaml
         kubectl apply -f k8s/deployment.yaml
         kubectl rollout status deployment/springboot-app
+        
+    - name: Get Spring Boot Pod Logs
+      run: |
+        kubectl get pods  # List pods to find the name of the Spring Boot pod
+        POD_NAME=$(kubectl get pods --selector=app=springboot-app -o jsonpath='{.items[0].metadata.name}')
+        kubectl logs $POD_NAME  # Fetch logs of the pod
+        
+    - name: Check Deployment Status
+      run: |
+        kubectl get deployments
+        kubectl get pods
+        kubectl describe deployment springboot-app
+
 
     - name: Destroy Kind cluster
       run: kind delete cluster --name my-cluster
