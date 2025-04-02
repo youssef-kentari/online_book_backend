@@ -60,7 +60,7 @@ jobs:
       run: |
         kubectl apply -f k8s/mysql.yaml
         kubectl apply -f k8s/deployment.yaml
-        kubectl rollout status deployment/springboot-app
+        kubectl rollout restart deployment/springboot-app
         
     - name: Get Spring Boot Pod Logs
       run: |
