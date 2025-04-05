@@ -43,5 +43,3 @@ jobs:
         kubectl apply -f k8s/deployment.yaml
         kubectl rollout restart deployment/springboot-app
 
-    - name: Destroy Kind cluster
-      run: kind delete cluster --name my-cluster
