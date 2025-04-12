@@ -19,7 +19,7 @@ jobs:
         java-version: '23'
 
     - name: Log in to Docker Hub
-      run: echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
+      run: echo "${{secrets.DOCKERHUB_PASSWORD }}" | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
 
     - name: Build JAR file
       run: mvn clean package -DskipTests
