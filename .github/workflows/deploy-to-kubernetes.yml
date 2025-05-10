@@ -1,4 +1,4 @@
-name: CI and Deploy to Kubernetes
+name: Deploy to Kubernetes
 
 on:
   push:
