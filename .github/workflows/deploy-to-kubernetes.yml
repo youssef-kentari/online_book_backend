@@ -9,7 +9,6 @@ on:
 jobs:
   cd:
     name: Deploy to Kubernetes
-    needs: ci  
     runs-on: self-hosted
 
     steps:
