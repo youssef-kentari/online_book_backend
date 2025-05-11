@@ -23,6 +23,8 @@ spec:
       labels:
         app: mysql
     spec:
+      nodeSelector:
+        kubernetes.io/hostname: kind-worker
       containers:
       - name: mysql
         image: mysql:8
