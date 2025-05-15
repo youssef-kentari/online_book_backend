@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: springboot-app
+  name: springboot-app-alpha
 spec:
   replicas: 2
   selector:
@@ -13,7 +13,7 @@ spec:
         app: springboot-app
     spec:
       nodeSelector:
-        kubernetes.io/hostname: worker-alpha
+        kubernetes.io/hostname: my-cluster-worker
       containers:
       - name: springboot-app
         image: youssefkentari/springboot-app:latest

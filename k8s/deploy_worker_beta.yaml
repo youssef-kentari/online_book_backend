@@ -13,7 +13,7 @@ spec:
         app: springboot-app
     spec:
       nodeSelector:
-        kubernetes.io/hostname: worker-beta
+        kubernetes.io/hostname: my-cluster-worker2
       containers:
       - name: springboot-app
         image: youssefkentari/springboot-app:latest
