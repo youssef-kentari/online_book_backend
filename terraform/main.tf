@@ -1,11 +1,19 @@
-
 resource "null_resource" "create_kind_cluster" {
   provisioner "local-exec" {
-    command     = "#!/bin/bash\nset -e\nif kind get clusters | grep -q \"^my-cluster$\"; then\n  kind delete cluster --name my-cluster\nfi\nkind create cluster --name my-cluster --config=../create_cluster.yml"
+    command     = "./create_kind_cluster.sh"
     interpreter = ["/bin/bash", "-c"]
   }
 
   triggers = {
     config_sha = filesha256("../create_cluster.yml")
   }
+}
+
+resource "null_resource" "install_argocd" {
+  provisioner "local-exec" {
+    command     = "./setup_argoCD.sh"
+    interpreter = ["/bin/bash", "-c"]
+  }
+
+  depends_on = [null_resource.create_kind_cluster]
 }
