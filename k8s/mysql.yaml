@@ -24,7 +24,7 @@ spec:
         app: mysql
     spec:
       nodeSelector:
-        kubernetes.io/hostname: kind-worker
+        kubernetes.io/hostname: my-cluster-worker3
       containers:
       - name: mysql
         image: mysql:8

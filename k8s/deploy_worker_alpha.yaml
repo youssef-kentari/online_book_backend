@@ -6,11 +6,11 @@ spec:
   replicas: 2
   selector:
     matchLabels:
-      app: springboot-app
+      app: springboot-app-alpha
   template:
     metadata:
       labels:
-        app: springboot-app
+        app: springboot-app-alpha
     spec:
       nodeSelector:
         kubernetes.io/hostname: my-cluster-worker
@@ -27,17 +27,17 @@ spec:
         - name: SPRING_DATASOURCE_PASSWORD
           value: "0000"
 ---
+# Alpha Service
 apiVersion: v1
 kind: Service
 metadata:
-  name: springboot-service
+  name: springboot-service-alpha
 spec:
   type: NodePort
   selector:
-    app: springboot-app
+    app: springboot-app-alpha
   ports:
     - protocol: TCP
       port: 80
       targetPort: 8080
-      nodePort: 30080  # Port entre 30000-32767
-
+      nodePort: 30080

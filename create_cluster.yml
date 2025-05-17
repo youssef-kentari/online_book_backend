@@ -10,4 +10,5 @@ nodes:
         hostPort: 9090
   - role: worker
   - role: worker
+  - role: worker
 
