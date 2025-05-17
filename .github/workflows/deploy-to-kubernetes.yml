@@ -30,8 +30,3 @@ jobs:
       - name: Test Kubernetes Connection
         run: kubectl cluster-info
 
-      - name: Deploy to Kubernetes
-        run: |
-          kubectl apply -f k8s/mysql.yaml
-          kubectl apply -f k8s/deploy_worker_beta.yaml
-          kubectl apply -f k8s/deploy_worker_alpha.yaml
